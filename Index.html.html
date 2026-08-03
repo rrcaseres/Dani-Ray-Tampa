@@ -1,0 +1,837 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="theme-color" content="#111827">
+<title>Dani & Ray's Tampa Bucket List</title>
+<style>
+:root{--bg:#f5f6f8;--ink:#17202a;--muted:#66727d;--line:#dfe4ea;--purple:#7c3aed;--blue:#2563eb;--gold:#b7791f;--green:#16803a}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+main{max-width:980px;margin:auto;padding:14px 14px 80px} .hero,.place-card{background:white;border-radius:20px;box-shadow:0 5px 22px rgba(0,0,0,.07)}
+.hero{padding:21px} h1{margin:0;font-size:29px;line-height:1.12} .sub{color:var(--muted);line-height:1.45}
+.home{display:flex;align-items:center;gap:12px;padding:14px;background:#fff1f2;border:1px solid #fecdd3;border-radius:14px}
+.home-dot{width:48px;height:48px;border-radius:50%;background:#dc2626;color:#fff;display:grid;place-items:center;font-size:12px;font-weight:800;flex:0 0 auto}
+.home a{font-weight:800;color:#a30f27} .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:14px}
+.stat{background:#f8fafc;border:1px solid var(--line);border-radius:13px;padding:11px;text-align:center} .stat b{display:block;font-size:21px} .stat small{color:var(--muted)}
+nav{position:sticky;top:0;z-index:5;display:flex;gap:7px;overflow:auto;padding:11px 0;background:rgba(245,246,248,.95);backdrop-filter:blur(12px)}
+nav button{white-space:nowrap;border:1px solid var(--line);background:white;border-radius:999px;padding:10px 13px;font-weight:750} nav button.active{background:#111827;color:white}
+.search{width:100%;padding:13px;border:1px solid var(--line);border-radius:13px;background:white;margin-bottom:12px}
+.section-title{display:flex;align-items:center;gap:9px;margin:16px 3px 10px} .section-title i,.card-title i{width:15px;height:15px;border-radius:50%;flex:0 0 auto}
+.purple{background:var(--purple)}.blue{background:var(--blue)}.gold{background:var(--gold)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:13px} .place-card{padding:17px;border:2px solid transparent}
+.place-card.completed{border-color:#86efac} .place-card.favorite{box-shadow:0 0 0 3px #fbcfe8,0 5px 22px rgba(0,0,0,.07)}
+.card-title{display:flex;gap:9px;align-items:flex-start} h3{margin:0;font-size:19px} .chips{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+.chips span{background:#eef2f6;border-radius:999px;padding:5px 8px;font-size:12px;font-weight:700} .details{color:#465360;line-height:1.45;min-height:130px}
+.details p{margin:7px 0} .source-note{font-size:12px;color:var(--muted)} .maps{display:block;background:#111827;color:#fff;text-decoration:none;text-align:center;border-radius:11px;padding:12px;font-weight:800;margin:12px 0}
+.tracker{display:grid;grid-template-columns:1fr 1fr;gap:9px} label{font-size:12px;font-weight:800;color:var(--muted)} select,textarea{width:100%;margin-top:4px;border:1px solid var(--line);border-radius:9px;padding:9px;background:white}
+.check{display:flex;align-items:center;gap:7px;color:var(--ink);font-size:14px} .check input{width:19px;height:19px} .wide{grid-column:1/-1} textarea{min-height:65px;resize:vertical}
+.backup{background:white;border-radius:16px;padding:16px;margin-top:20px} .backup button{border:1px solid var(--line);background:#fff;padding:10px 12px;border-radius:999px;font-weight:700;margin:3px}
+.hidden{display:none!important} #toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#111827;color:white;padding:10px 14px;border-radius:999px;opacity:0;transition:.2s} #toast.show{opacity:1}
+@media(max-width:650px){.stats{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}main{padding:11px 11px 70px}}
+</style></head><body><main>
+<section class="hero"><h1>Dani & Ray's Tampa Bucket List</h1><p class="sub">One city. One year. A clean checklist for restaurants, activities, and a Michelin wild card.</p>
+<div class="home"><div class="home-dot">HOME</div><div><b>Navigate back home</b><br><a href="https://maps.apple.com/?daddr=8230+Yellow+Lily+Ave+Apt+1204%2C+Tampa%2C+FL+33619&dirflg=d">8230 Yellow Lily Ave Apt 1204, Tampa, FL 33619</a></div></div>
+<div class="stats"><div class="stat"><b id="overall">0/65</b><small>Completed</small></div><div class="stat"><b id="restStat">0/30</b><small>Restaurants</small></div><div class="stat"><b id="actStat">0/25</b><small>Activities</small></div><div class="stat"><b id="avgStat">—</b><small>Avg. rating</small></div></div></section>
+<nav><button class="active" data-filter="all">All</button><button data-filter="restaurant">Restaurants</button><button data-filter="activity">Activities</button><button data-filter="michelin">Michelin Wild Card</button><button data-filter="planned">Planned</button><button data-filter="completed">Completed</button><button data-filter="favorite">Favorites</button></nav>
+<input id="search" class="search" placeholder="Search by name, cuisine, attire, or activity…">
+<section data-group="restaurant"><div class="section-title"><i class="purple"></i><h2>30 Restaurants</h2></div><div class="grid">
+    <article class="place-card" data-category="restaurant" data-key="restaurant-0" data-search="bern&#x27;s steak house &lt;span&gt;steakhouse&lt;/span&gt;&lt;span&gt;$$$$&lt;/span&gt;&lt;span&gt;attire: business casual / dressy&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; excellent&lt;/p&gt;&lt;p&gt;iconic service, steaks, wine cellar, and dessert room. best for major celebrations.&lt;/p&gt;&lt;p&gt;&lt;b&gt;must try:&lt;/b&gt; delmonico steak; dessert room&lt;/p&gt;">
+      <div class="card-title"><i class="purple"></i><h3>Bern&#x27;s Steak House</h3></div>
+      <div class="chips"><span>Steakhouse</span><span>$$$$</span><span>Attire: Business casual / dressy</span></div>
+      <div class="details"><p><b>Overall review:</b> Excellent</p><p>Iconic service, steaks, wine cellar, and dessert room. Best for major celebrations.</p><p><b>Must try:</b> Delmonico steak; dessert room</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=1208+S+Howard+Ave%2C+Tampa%2C+FL+33606&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="restaurant" data-key="restaurant-1" data-search="rocca &lt;span&gt;italian&lt;/span&gt;&lt;span&gt;$$$&lt;/span&gt;&lt;span&gt;attire: smart casual / dressy&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; exceptional&lt;/p&gt;&lt;p&gt;one-michelin-star italian cooking with handmade pasta and polished service.&lt;/p&gt;&lt;p&gt;&lt;b&gt;must try:&lt;/b&gt; mozzarella cart; handmade pasta&lt;/p&gt;">
+      <div class="card-title"><i class="purple"></i><h3>Rocca</h3></div>
+      <div class="chips"><span>Italian</span><span>$$$</span><span>Attire: Smart casual / dressy</span></div>
+      <div class="details"><p><b>Overall review:</b> Exceptional</p><p>One-MICHELIN-star Italian cooking with handmade pasta and polished service.</p><p><b>Must try:</b> Mozzarella cart; handmade pasta</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=323+W+Palm+Ave%2C+Tampa%2C+FL+33602&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="restaurant" data-key="restaurant-2" data-search="ulele &lt;span&gt;florida-inspired&lt;/span&gt;&lt;span&gt;$$$&lt;/span&gt;&lt;span&gt;attire: smart casual&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; excellent&lt;/p&gt;&lt;p&gt;waterfront atmosphere and distinctive florida-inspired dishes make it a strong all-around date choice.&lt;/p&gt;&lt;p&gt;&lt;b&gt;must try:&lt;/b&gt; charbroiled oysters; alligator hush puppies&lt;/p&gt;">
+      <div class="card-title"><i class="purple"></i><h3>Ulele</h3></div>
+      <div class="chips"><span>Florida-inspired</span><span>$$$</span><span>Attire: Smart casual</span></div>
+      <div class="details"><p><b>Overall review:</b> Excellent</p><p>Waterfront atmosphere and distinctive Florida-inspired dishes make it a strong all-around date choice.</p><p><b>Must try:</b> Charbroiled oysters; alligator hush puppies</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=1810+N+Highland+Ave%2C+Tampa%2C+FL+33602&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="restaurant" data-key="restaurant-3" data-search="columbia restaurant &lt;span&gt;spanish &amp;amp; cuban&lt;/span&gt;&lt;span&gt;$$–$$$&lt;/span&gt;&lt;span&gt;attire: smart casual&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; very good&lt;/p&gt;&lt;p&gt;historic ybor setting, classic spanish-cuban dishes, and flamenco performances.&lt;/p&gt;&lt;p&gt;&lt;b&gt;must try:&lt;/b&gt; 1905 salad; cuban sandwich; paella&lt;/p&gt;">
+      <div class="card-title"><i class="purple"></i><h3>Columbia Restaurant</h3></div>
+      <div class="chips"><span>Spanish &amp; Cuban</span><span>$$–$$$</span><span>Attire: Smart casual</span></div>
+      <div class="details"><p><b>Overall review:</b> Very good</p><p>Historic Ybor setting, classic Spanish-Cuban dishes, and flamenco performances.</p><p><b>Must try:</b> 1905 Salad; Cuban sandwich; paella</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=2117+E+7th+Ave%2C+Tampa%2C+FL+33605&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="restaurant" data-key="restaurant-4" data-search="oxford exchange &lt;span&gt;american / café&lt;/span&gt;&lt;span&gt;$$–$$$&lt;/span&gt;&lt;span&gt;attire: smart casual&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; excellent&lt;/p&gt;&lt;p&gt;one of tampa&amp;#x27;s most attractive brunch settings, combining dining, coffee, books, and shopping.&lt;/p&gt;&lt;p&gt;&lt;b&gt;must try:&lt;/b&gt; brunch; tea; seasonal pastries&lt;/p&gt;">
+      <div class="card-title"><i class="purple"></i><h3>Oxford Exchange</h3></div>
+      <div class="chips"><span>American / Café</span><span>$$–$$$</span><span>Attire: Smart casual</span></div>
+      <div class="details"><p><b>Overall review:</b> Excellent</p><p>One of Tampa&#x27;s most attractive brunch settings, combining dining, coffee, books, and shopping.</p><p><b>Must try:</b> Brunch; tea; seasonal pastries</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=420+W+Kennedy+Blvd%2C+Tampa%2C+FL+33606&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="restaurant" data-key="restaurant-5" data-search="on swann &lt;span&gt;new american&lt;/span&gt;&lt;span&gt;$$$&lt;/span&gt;&lt;span&gt;attire: smart casual&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; excellent&lt;/p&gt;&lt;p&gt;energetic hyde park restaurant with strong shareable plates and polished cocktails.&lt;/p&gt;&lt;p&gt;&lt;b&gt;must try:&lt;/b&gt; seasonal small plates&lt;/p&gt;">
+      <div class="card-title"><i class="purple"></i><h3>On Swann</h3></div>
+      <div class="chips"><span>New American</span><span>$$$</span><span>Attire: Smart casual</span></div>
+      <div class="details"><p><b>Overall review:</b> Excellent</p><p>Energetic Hyde Park restaurant with strong shareable plates and polished cocktails.</p><p><b>Must try:</b> Seasonal small plates</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=1501+W+Swann+Ave%2C+Tampa%2C+FL+33606&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="restaurant" data-key="restaurant-6" data-search="olivia &lt;span&gt;italian&lt;/span&gt;&lt;span&gt;$$$&lt;/span&gt;&lt;span&gt;attire: smart casual / date-night&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; excellent&lt;/p&gt;&lt;p&gt;stylish room, modern italian menu, and lively atmosphere.&lt;/p&gt;&lt;p&gt;&lt;b&gt;must try:&lt;/b&gt; pasta; pizza; meatballs&lt;/p&gt;">
+      <div class="card-title"><i class="purple"></i><h3>Olivia</h3></div>
+      <div class="chips"><span>Italian</span><span>$$$</span><span>Attire: Smart casual / date-night</span></div>
+      <div class="details"><p><b>Overall review:</b> Excellent</p><p>Stylish room, modern Italian menu, and lively atmosphere.</p><p><b>Must try:</b> Pasta; pizza; meatballs</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=3601+W+Swann+Ave%2C+Tampa%2C+FL+33609&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="restaurant" data-key="restaurant-7" data-search="ponte modern american &lt;span&gt;modern american&lt;/span&gt;&lt;span&gt;$$$$&lt;/span&gt;&lt;span&gt;attire: business casual / dressy&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; excellent&lt;/p&gt;&lt;p&gt;refined midtown dining with attentive service and an upscale atmosphere.&lt;/p&gt;&lt;p&gt;&lt;b&gt;must try:&lt;/b&gt; steaks; seafood; composed entrées&lt;/p&gt;">
+      <div class="card-title"><i class="purple"></i><h3>Ponte Modern American</h3></div>
+      <div class="chips"><span>Modern American</span><span>$$$$</span><span>Attire: Business casual / dressy</span></div>
+      <div class="details"><p><b>Overall review:</b> Excellent</p><p>Refined Midtown dining with attentive service and an upscale atmosphere.</p><p><b>Must try:</b> Steaks; seafood; composed entrées</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=1010+Gramercy+Ln%2C+Tampa%2C+FL+33607&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="restaurant" data-key="restaurant-8" data-search="boulon brasserie &lt;span&gt;french brasserie&lt;/span&gt;&lt;span&gt;$$$&lt;/span&gt;&lt;span&gt;attire: smart casual / fashionable&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; very good&lt;/p&gt;&lt;p&gt;large, fashionable water street venue suited to dinner before a downtown walk.&lt;/p&gt;&lt;p&gt;&lt;b&gt;must try:&lt;/b&gt; french onion soup; steak frites&lt;/p&gt;">
+      <div class="card-title"><i class="purple"></i><h3>Boulon Brasserie</h3></div>
+      <div class="chips"><span>French Brasserie</span><span>$$$</span><span>Attire: Smart casual / fashionable</span></div>
+      <div class="details"><p><b>Overall review:</b> Very good</p><p>Large, fashionable Water Street venue suited to dinner before a downtown walk.</p><p><b>Must try:</b> French onion soup; steak frites</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=1001+Water+St%2C+Tampa%2C+FL+33602&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="restaurant" data-key="restaurant-9" data-search="casa cami &lt;span&gt;mexican-inspired&lt;/span&gt;&lt;span&gt;$$$&lt;/span&gt;&lt;span&gt;attire: smart casual / resort chic&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; very good&lt;/p&gt;&lt;p&gt;rooftop bay views and sunset atmosphere are the main draw.&lt;/p&gt;&lt;p&gt;&lt;b&gt;must try:&lt;/b&gt; shareable plates; cocktails&lt;/p&gt;">
+      <div class="card-title"><i class="purple"></i><h3>Casa Cami</h3></div>
+      <div class="chips"><span>Mexican-inspired</span><span>$$$</span><span>Attire: Smart casual / resort chic</span></div>
+      <div class="details"><p><b>Overall review:</b> Very good</p><p>Rooftop bay views and sunset atmosphere are the main draw.</p><p><b>Must try:</b> Shareable plates; cocktails</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=2545+N+Rocky+Point+Dr%2C+Tampa%2C+FL+33607&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="restaurant" data-key="restaurant-10" data-search="oystercatchers &lt;span&gt;seafood&lt;/span&gt;&lt;span&gt;$$$$&lt;/span&gt;&lt;span&gt;attire: resort smart casual&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; very good&lt;/p&gt;&lt;p&gt;longtime waterfront seafood destination with broad bay views.&lt;/p&gt;&lt;p&gt;&lt;b&gt;must try:&lt;/b&gt; seafood tower; fresh catch&lt;/p&gt;">
+      <div class="card-title"><i class="purple"></i><h3>Oystercatchers</h3></div>
+      <div class="chips"><span>Seafood</span><span>$$$$</span><span>Attire: Resort smart casual</span></div>
+      <div class="details"><p><b>Overall review:</b> Very good</p><p>Longtime waterfront seafood destination with broad bay views.</p><p><b>Must try:</b> Seafood tower; fresh catch</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=2900+Bayport+Dr%2C+Tampa%2C+FL+33607&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="restaurant" data-key="restaurant-11" data-search="salt shack on the bay &lt;span&gt;casual seafood&lt;/span&gt;&lt;span&gt;$$&lt;/span&gt;&lt;span&gt;attire: casual / waterfront&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; very good&lt;/p&gt;&lt;p&gt;relaxed outdoor setting with sunsets, tropical drinks, and casual seafood.&lt;/p&gt;&lt;p&gt;&lt;b&gt;must try:&lt;/b&gt; fish tacos; frozen drinks&lt;/p&gt;">
+      <div class="card-title"><i class="purple"></i><h3>Salt Shack on the Bay</h3></div>
+      <div class="chips"><span>Casual Seafood</span><span>$$</span><span>Attire: Casual / waterfront</span></div>
+      <div class="details"><p><b>Overall review:</b> Very good</p><p>Relaxed outdoor setting with sunsets, tropical drinks, and casual seafood.</p><p><b>Must try:</b> Fish tacos; frozen drinks</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=5415+W+Tyson+Ave%2C+Tampa%2C+FL+33611&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="restaurant" data-key="restaurant-12" data-search="haven &lt;span&gt;small plates &amp;amp; wine&lt;/span&gt;&lt;span&gt;$$$&lt;/span&gt;&lt;span&gt;attire: smart casual&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; excellent&lt;/p&gt;&lt;p&gt;strong wine, cheese, charcuterie, and creative small plates in south tampa.&lt;/p&gt;&lt;p&gt;&lt;b&gt;must try:&lt;/b&gt; cheese and charcuterie&lt;/p&gt;">
+      <div class="card-title"><i class="purple"></i><h3>Haven</h3></div>
+      <div class="chips"><span>Small Plates &amp; Wine</span><span>$$$</span><span>Attire: Smart casual</span></div>
+      <div class="details"><p><b>Overall review:</b> Excellent</p><p>Strong wine, cheese, charcuterie, and creative small plates in South Tampa.</p><p><b>Must try:</b> Cheese and charcuterie</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=2208+W+Morrison+Ave%2C+Tampa%2C+FL+33606&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="restaurant" data-key="restaurant-13" data-search="bosphorous turkish cuisine &lt;span&gt;turkish / mediterranean&lt;/span&gt;&lt;span&gt;$$–$$$&lt;/span&gt;&lt;span&gt;attire: smart casual&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; very good&lt;/p&gt;&lt;p&gt;generous portions and shareable mediterranean dishes make it easy for a relaxed date.&lt;/p&gt;&lt;p&gt;&lt;b&gt;must try:&lt;/b&gt; lavas bread; mixed grill&lt;/p&gt;">
+      <div class="card-title"><i class="purple"></i><h3>Bosphorous Turkish Cuisine</h3></div>
+      <div class="chips"><span>Turkish / Mediterranean</span><span>$$–$$$</span><span>Attire: Smart casual</span></div>
+      <div class="details"><p><b>Overall review:</b> Very good</p><p>Generous portions and shareable Mediterranean dishes make it easy for a relaxed date.</p><p><b>Must try:</b> Lavas bread; mixed grill</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=714+S+Howard+Ave%2C+Tampa%2C+FL+33606&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="restaurant" data-key="restaurant-14" data-search="psomi &lt;span&gt;greek&lt;/span&gt;&lt;span&gt;$$&lt;/span&gt;&lt;span&gt;attire: casual / polished&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; excellent&lt;/p&gt;&lt;p&gt;michelin bib gourmand known for polished greek comfort food and popular brunch.&lt;/p&gt;&lt;p&gt;&lt;b&gt;must try:&lt;/b&gt; baklava latte; greek plates&lt;/p&gt;">
+      <div class="card-title"><i class="purple"></i><h3>Psomi</h3></div>
+      <div class="chips"><span>Greek</span><span>$$</span><span>Attire: Casual / polished</span></div>
+      <div class="details"><p><b>Overall review:</b> Excellent</p><p>MICHELIN Bib Gourmand known for polished Greek comfort food and popular brunch.</p><p><b>Must try:</b> Baklava latte; Greek plates</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=701+N+Howard+Ave%2C+Tampa%2C+FL+33606&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="restaurant" data-key="restaurant-15" data-search="koya &lt;span&gt;japanese contemporary&lt;/span&gt;&lt;span&gt;$$$$&lt;/span&gt;&lt;span&gt;attire: dressy / refined&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; exceptional&lt;/p&gt;&lt;p&gt;intimate one-michelin-star tasting experience with limited seating.&lt;/p&gt;&lt;p&gt;&lt;b&gt;must try:&lt;/b&gt; chef&amp;#x27;s tasting menu&lt;/p&gt;">
+      <div class="card-title"><i class="purple"></i><h3>Koya</h3></div>
+      <div class="chips"><span>Japanese Contemporary</span><span>$$$$</span><span>Attire: Dressy / refined</span></div>
+      <div class="details"><p><b>Overall review:</b> Exceptional</p><p>Intimate one-MICHELIN-star tasting experience with limited seating.</p><p><b>Must try:</b> Chef&#x27;s tasting menu</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=807+W+Platt+St%2C+Tampa%2C+FL+33606&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="restaurant" data-key="restaurant-16" data-search="kōsen &lt;span&gt;japanese / sushi&lt;/span&gt;&lt;span&gt;$$$$&lt;/span&gt;&lt;span&gt;attire: dressy / refined&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; exceptional&lt;/p&gt;&lt;p&gt;one-michelin-star omakase focused on precise sushi and premium ingredients.&lt;/p&gt;&lt;p&gt;&lt;b&gt;must try:&lt;/b&gt; omakase&lt;/p&gt;">
+      <div class="card-title"><i class="purple"></i><h3>Kōsen</h3></div>
+      <div class="chips"><span>Japanese / Sushi</span><span>$$$$</span><span>Attire: Dressy / refined</span></div>
+      <div class="details"><p><b>Overall review:</b> Exceptional</p><p>One-MICHELIN-star omakase focused on precise sushi and premium ingredients.</p><p><b>Must try:</b> Omakase</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=307+W+Palm+Ave%2C+Tampa%2C+FL+33602&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="restaurant" data-key="restaurant-17" data-search="ebbe &lt;span&gt;contemporary&lt;/span&gt;&lt;span&gt;$$$$&lt;/span&gt;&lt;span&gt;attire: dressy&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; exceptional&lt;/p&gt;&lt;p&gt;one-michelin-star tasting menu in an intimate chef-led setting.&lt;/p&gt;&lt;p&gt;&lt;b&gt;must try:&lt;/b&gt; seasonal tasting menu&lt;/p&gt;">
+      <div class="card-title"><i class="purple"></i><h3>Ebbe</h3></div>
+      <div class="chips"><span>Contemporary</span><span>$$$$</span><span>Attire: Dressy</span></div>
+      <div class="details"><p><b>Overall review:</b> Exceptional</p><p>One-MICHELIN-star tasting menu in an intimate chef-led setting.</p><p><b>Must try:</b> Seasonal tasting menu</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=1202+N+Franklin+St%2C+Tampa%2C+FL+33602&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="restaurant" data-key="restaurant-18" data-search="lilac &lt;span&gt;mediterranean contemporary&lt;/span&gt;&lt;span&gt;$$$$&lt;/span&gt;&lt;span&gt;attire: dressy / resort elegant&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; exceptional&lt;/p&gt;&lt;p&gt;michelin-starred prix-fixe dining inside the tampa edition.&lt;/p&gt;&lt;p&gt;&lt;b&gt;must try:&lt;/b&gt; prix-fixe tasting menu&lt;/p&gt;">
+      <div class="card-title"><i class="purple"></i><h3>Lilac</h3></div>
+      <div class="chips"><span>Mediterranean Contemporary</span><span>$$$$</span><span>Attire: Dressy / resort elegant</span></div>
+      <div class="details"><p><b>Overall review:</b> Exceptional</p><p>MICHELIN-starred prix-fixe dining inside The Tampa EDITION.</p><p><b>Must try:</b> Prix-fixe tasting menu</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=500+Channelside+Dr%2C+Tampa%2C+FL+33602&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="restaurant" data-key="restaurant-19" data-search="predalina &lt;span&gt;mediterranean&lt;/span&gt;&lt;span&gt;$$$&lt;/span&gt;&lt;span&gt;attire: smart casual / fashionable&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; very good&lt;/p&gt;&lt;p&gt;a stylish water street option with seafood-forward mediterranean cooking.&lt;/p&gt;&lt;p&gt;&lt;b&gt;must try:&lt;/b&gt; seafood; mezze&lt;/p&gt;">
+      <div class="card-title"><i class="purple"></i><h3>Predalina</h3></div>
+      <div class="chips"><span>Mediterranean</span><span>$$$</span><span>Attire: Smart casual / fashionable</span></div>
+      <div class="details"><p><b>Overall review:</b> Very good</p><p>A stylish Water Street option with seafood-forward Mediterranean cooking.</p><p><b>Must try:</b> Seafood; mezze</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=1001+E+Cumberland+Ave%2C+Tampa%2C+FL+33602&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="restaurant" data-key="restaurant-20" data-search="noble rice &lt;span&gt;japanese&lt;/span&gt;&lt;span&gt;$$$&lt;/span&gt;&lt;span&gt;attire: smart casual&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; excellent&lt;/p&gt;&lt;p&gt;michelin-selected japanese restaurant known for sushi and creative dishes.&lt;/p&gt;&lt;p&gt;&lt;b&gt;must try:&lt;/b&gt; sushi; omakase options&lt;/p&gt;">
+      <div class="card-title"><i class="purple"></i><h3>Noble Rice</h3></div>
+      <div class="chips"><span>Japanese</span><span>$$$</span><span>Attire: Smart casual</span></div>
+      <div class="details"><p><b>Overall review:</b> Excellent</p><p>MICHELIN-selected Japanese restaurant known for sushi and creative dishes.</p><p><b>Must try:</b> Sushi; omakase options</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=615+Channelside+Dr+Ste+112%2C+Tampa%2C+FL+33602&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="restaurant" data-key="restaurant-21" data-search="the pearl &lt;span&gt;american&lt;/span&gt;&lt;span&gt;$$&lt;/span&gt;&lt;span&gt;attire: smart casual&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; very good&lt;/p&gt;&lt;p&gt;popular water street tavern for oysters, seafood, and cocktails.&lt;/p&gt;&lt;p&gt;&lt;b&gt;must try:&lt;/b&gt; oysters; seafood&lt;/p&gt;">
+      <div class="card-title"><i class="purple"></i><h3>The Pearl</h3></div>
+      <div class="chips"><span>American</span><span>$$</span><span>Attire: Smart casual</span></div>
+      <div class="details"><p><b>Overall review:</b> Very good</p><p>Popular Water Street tavern for oysters, seafood, and cocktails.</p><p><b>Must try:</b> Oysters; seafood</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=823+Water+St%2C+Tampa%2C+FL+33602&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="restaurant" data-key="restaurant-22" data-search="rooster &amp; the till &lt;span&gt;new american&lt;/span&gt;&lt;span&gt;$$$&lt;/span&gt;&lt;span&gt;attire: smart casual&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; excellent&lt;/p&gt;&lt;p&gt;inventive small plates and energetic service in seminole heights.&lt;/p&gt;&lt;p&gt;&lt;b&gt;must try:&lt;/b&gt; chef-driven small plates&lt;/p&gt;">
+      <div class="card-title"><i class="purple"></i><h3>Rooster &amp; the Till</h3></div>
+      <div class="chips"><span>New American</span><span>$$$</span><span>Attire: Smart casual</span></div>
+      <div class="details"><p><b>Overall review:</b> Excellent</p><p>Inventive small plates and energetic service in Seminole Heights.</p><p><b>Must try:</b> Chef-driven small plates</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=6500+N+Florida+Ave%2C+Tampa%2C+FL+33604&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="restaurant" data-key="restaurant-23" data-search="mise en place &lt;span&gt;new american&lt;/span&gt;&lt;span&gt;$$$&lt;/span&gt;&lt;span&gt;attire: business casual&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; excellent&lt;/p&gt;&lt;p&gt;longstanding tampa fine-dining institution with polished contemporary cooking.&lt;/p&gt;&lt;p&gt;&lt;b&gt;must try:&lt;/b&gt; seasonal entrées&lt;/p&gt;">
+      <div class="card-title"><i class="purple"></i><h3>Mise en Place</h3></div>
+      <div class="chips"><span>New American</span><span>$$$</span><span>Attire: Business casual</span></div>
+      <div class="details"><p><b>Overall review:</b> Excellent</p><p>Longstanding Tampa fine-dining institution with polished contemporary cooking.</p><p><b>Must try:</b> Seasonal entrées</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=442+W+Kennedy+Blvd+Ste+110%2C+Tampa%2C+FL+33606&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="restaurant" data-key="restaurant-24" data-search="oak &amp; ola &lt;span&gt;european-inspired&lt;/span&gt;&lt;span&gt;$$$&lt;/span&gt;&lt;span&gt;attire: smart casual&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; excellent&lt;/p&gt;&lt;p&gt;warm dining room at armature works with a european-influenced menu.&lt;/p&gt;&lt;p&gt;&lt;b&gt;must try:&lt;/b&gt; roasted meats; seasonal plates&lt;/p&gt;">
+      <div class="card-title"><i class="purple"></i><h3>Oak &amp; Ola</h3></div>
+      <div class="chips"><span>European-inspired</span><span>$$$</span><span>Attire: Smart casual</span></div>
+      <div class="details"><p><b>Overall review:</b> Excellent</p><p>Warm dining room at Armature Works with a European-influenced menu.</p><p><b>Must try:</b> Roasted meats; seasonal plates</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=1910+N+Ola+Ave%2C+Tampa%2C+FL+33602&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="restaurant" data-key="restaurant-25" data-search="steelbach &lt;span&gt;southern steakhouse&lt;/span&gt;&lt;span&gt;$$$&lt;/span&gt;&lt;span&gt;attire: smart casual&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; very good&lt;/p&gt;&lt;p&gt;convenient armature works steakhouse with a lively setting.&lt;/p&gt;&lt;p&gt;&lt;b&gt;must try:&lt;/b&gt; steak; southern sides&lt;/p&gt;">
+      <div class="card-title"><i class="purple"></i><h3>Steelbach</h3></div>
+      <div class="chips"><span>Southern Steakhouse</span><span>$$$</span><span>Attire: Smart casual</span></div>
+      <div class="details"><p><b>Overall review:</b> Very good</p><p>Convenient Armature Works steakhouse with a lively setting.</p><p><b>Must try:</b> Steak; Southern sides</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=1902+N+Ola+Ave%2C+Tampa%2C+FL+33602&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="restaurant" data-key="restaurant-26" data-search="timpano hyde park &lt;span&gt;italian&lt;/span&gt;&lt;span&gt;$$$&lt;/span&gt;&lt;span&gt;attire: smart casual / fashionable&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; very good&lt;/p&gt;&lt;p&gt;lively hyde park italian restaurant known for energetic dinners.&lt;/p&gt;&lt;p&gt;&lt;b&gt;must try:&lt;/b&gt; pasta; tableside dishes&lt;/p&gt;">
+      <div class="card-title"><i class="purple"></i><h3>Timpano Hyde Park</h3></div>
+      <div class="chips"><span>Italian</span><span>$$$</span><span>Attire: Smart casual / fashionable</span></div>
+      <div class="details"><p><b>Overall review:</b> Very good</p><p>Lively Hyde Park Italian restaurant known for energetic dinners.</p><p><b>Must try:</b> Pasta; tableside dishes</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=1610+W+Swann+Ave%2C+Tampa%2C+FL+33606&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="restaurant" data-key="restaurant-27" data-search="charley&#x27;s steak house &lt;span&gt;steakhouse&lt;/span&gt;&lt;span&gt;$$$$&lt;/span&gt;&lt;span&gt;attire: business casual / dressy&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; excellent&lt;/p&gt;&lt;p&gt;classic upscale steakhouse with wood-fired steaks and attentive service.&lt;/p&gt;&lt;p&gt;&lt;b&gt;must try:&lt;/b&gt; dry-aged steak&lt;/p&gt;">
+      <div class="card-title"><i class="purple"></i><h3>Charley&#x27;s Steak House</h3></div>
+      <div class="chips"><span>Steakhouse</span><span>$$$$</span><span>Attire: Business casual / dressy</span></div>
+      <div class="details"><p><b>Overall review:</b> Excellent</p><p>Classic upscale steakhouse with wood-fired steaks and attentive service.</p><p><b>Must try:</b> Dry-aged steak</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=4444+W+Cypress+St%2C+Tampa%2C+FL+33607&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="restaurant" data-key="restaurant-28" data-search="ocean prime &lt;span&gt;seafood &amp;amp; steak&lt;/span&gt;&lt;span&gt;$$$$&lt;/span&gt;&lt;span&gt;attire: business casual / dressy&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; excellent&lt;/p&gt;&lt;p&gt;reliable special-occasion dining near international plaza.&lt;/p&gt;&lt;p&gt;&lt;b&gt;must try:&lt;/b&gt; seafood tower; steaks&lt;/p&gt;">
+      <div class="card-title"><i class="purple"></i><h3>Ocean Prime</h3></div>
+      <div class="chips"><span>Seafood &amp; Steak</span><span>$$$$</span><span>Attire: Business casual / dressy</span></div>
+      <div class="details"><p><b>Overall review:</b> Excellent</p><p>Reliable special-occasion dining near International Plaza.</p><p><b>Must try:</b> Seafood tower; steaks</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=2205+N+Westshore+Blvd%2C+Tampa%2C+FL+33607&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="restaurant" data-key="restaurant-29" data-search="willa&#x27;s &lt;span&gt;american&lt;/span&gt;&lt;span&gt;$$–$$$&lt;/span&gt;&lt;span&gt;attire: smart casual&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; very good&lt;/p&gt;&lt;p&gt;attractive neighborhood restaurant suited to brunch, cocktails, or an easy dinner.&lt;/p&gt;&lt;p&gt;&lt;b&gt;must try:&lt;/b&gt; rotisserie chicken; brunch&lt;/p&gt;">
+      <div class="card-title"><i class="purple"></i><h3>Willa&#x27;s</h3></div>
+      <div class="chips"><span>American</span><span>$$–$$$</span><span>Attire: Smart casual</span></div>
+      <div class="details"><p><b>Overall review:</b> Very good</p><p>Attractive neighborhood restaurant suited to brunch, cocktails, or an easy dinner.</p><p><b>Must try:</b> Rotisserie chicken; brunch</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=1700+W+Fig+St%2C+Tampa%2C+FL+33606&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article></div></section>
+<section data-group="activity"><div class="section-title"><i class="blue"></i><h2>25 Date Ideas & Activities</h2></div><div class="grid">
+    <article class="place-card" data-category="activity" data-key="activity-0" data-search="tampa riverwalk &lt;span&gt;free&lt;/span&gt;&lt;span&gt;2–3 hours&lt;/span&gt;&lt;span&gt;attire: casual; comfortable walking shoes&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; excellent&lt;/p&gt;&lt;p&gt;a signature waterfront walk connecting parks, museums, dining, and downtown attractions.&lt;/p&gt;">
+      <div class="card-title"><i class="blue"></i><h3>Tampa Riverwalk</h3></div>
+      <div class="chips"><span>Free</span><span>2–3 hours</span><span>Attire: Casual; comfortable walking shoes</span></div>
+      <div class="details"><p><b>Overall review:</b> Excellent</p><p>A signature waterfront walk connecting parks, museums, dining, and downtown attractions.</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=Tampa+Riverwalk%2C+Tampa%2C+FL&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="activity" data-key="activity-1" data-search="clearwater beach sunset &lt;span&gt;$&lt;/span&gt;&lt;span&gt;3–5 hours&lt;/span&gt;&lt;span&gt;attire: beachwear; sandals; light layer&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; excellent&lt;/p&gt;&lt;p&gt;a classic gulf coast date with a strong sunset payoff.&lt;/p&gt;">
+      <div class="card-title"><i class="blue"></i><h3>Clearwater Beach Sunset</h3></div>
+      <div class="chips"><span>$</span><span>3–5 hours</span><span>Attire: Beachwear; sandals; light layer</span></div>
+      <div class="details"><p><b>Overall review:</b> Excellent</p><p>A classic Gulf Coast date with a strong sunset payoff.</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=Pier+60%2C+Clearwater+Beach%2C+FL&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="activity" data-key="activity-2" data-search="hyde park village &lt;span&gt;free–$$$&lt;/span&gt;&lt;span&gt;2–4 hours&lt;/span&gt;&lt;span&gt;attire: smart casual; comfortable shoes&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; excellent&lt;/p&gt;&lt;p&gt;walkable shopping, dining, coffee, and dessert in a polished outdoor district.&lt;/p&gt;">
+      <div class="card-title"><i class="blue"></i><h3>Hyde Park Village</h3></div>
+      <div class="chips"><span>Free–$$$</span><span>2–4 hours</span><span>Attire: Smart casual; comfortable shoes</span></div>
+      <div class="details"><p><b>Overall review:</b> Excellent</p><p>Walkable shopping, dining, coffee, and dessert in a polished outdoor district.</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=1602+W+Snow+Ave%2C+Tampa%2C+FL+33606&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="activity" data-key="activity-3" data-search="the florida aquarium &lt;span&gt;$$&lt;/span&gt;&lt;span&gt;2–3 hours&lt;/span&gt;&lt;span&gt;attire: casual; comfortable shoes&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; excellent&lt;/p&gt;&lt;p&gt;a dependable indoor date that pairs easily with sparkman wharf.&lt;/p&gt;">
+      <div class="card-title"><i class="blue"></i><h3>The Florida Aquarium</h3></div>
+      <div class="chips"><span>$$</span><span>2–3 hours</span><span>Attire: Casual; comfortable shoes</span></div>
+      <div class="details"><p><b>Overall review:</b> Excellent</p><p>A dependable indoor date that pairs easily with Sparkman Wharf.</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=701+Channelside+Dr%2C+Tampa%2C+FL+33602&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="activity" data-key="activity-4" data-search="busch gardens tampa bay &lt;span&gt;$$$&lt;/span&gt;&lt;span&gt;full day&lt;/span&gt;&lt;span&gt;attire: athletic casual; walking shoes&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; excellent&lt;/p&gt;&lt;p&gt;major thrill rides, animal experiences, and seasonal events.&lt;/p&gt;">
+      <div class="card-title"><i class="blue"></i><h3>Busch Gardens Tampa Bay</h3></div>
+      <div class="chips"><span>$$$</span><span>Full day</span><span>Attire: Athletic casual; walking shoes</span></div>
+      <div class="details"><p><b>Overall review:</b> Excellent</p><p>Major thrill rides, animal experiences, and seasonal events.</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=10165+McKinley+Dr%2C+Tampa%2C+FL+33612&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="activity" data-key="activity-5" data-search="zootampa at lowry park &lt;span&gt;$$&lt;/span&gt;&lt;span&gt;3–5 hours&lt;/span&gt;&lt;span&gt;attire: casual; walking shoes; sun protection&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; very good&lt;/p&gt;&lt;p&gt;relaxed daytime date with shaded paths and varied animal habitats.&lt;/p&gt;">
+      <div class="card-title"><i class="blue"></i><h3>ZooTampa at Lowry Park</h3></div>
+      <div class="chips"><span>$$</span><span>3–5 hours</span><span>Attire: Casual; walking shoes; sun protection</span></div>
+      <div class="details"><p><b>Overall review:</b> Very good</p><p>Relaxed daytime date with shaded paths and varied animal habitats.</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=1101+W+Sligh+Ave%2C+Tampa%2C+FL+33604&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="activity" data-key="activity-6" data-search="armature works &lt;span&gt;free–$$&lt;/span&gt;&lt;span&gt;2–4 hours&lt;/span&gt;&lt;span&gt;attire: casual / smart casual&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; excellent&lt;/p&gt;&lt;p&gt;food hall, river seating, drinks, and easy riverwalk access.&lt;/p&gt;">
+      <div class="card-title"><i class="blue"></i><h3>Armature Works</h3></div>
+      <div class="chips"><span>Free–$$</span><span>2–4 hours</span><span>Attire: Casual / smart casual</span></div>
+      <div class="details"><p><b>Overall review:</b> Excellent</p><p>Food hall, river seating, drinks, and easy Riverwalk access.</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=1910+N+Ola+Ave%2C+Tampa%2C+FL+33602&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="activity" data-key="activity-7" data-search="sparkman wharf &lt;span&gt;free–$$&lt;/span&gt;&lt;span&gt;2–3 hours&lt;/span&gt;&lt;span&gt;attire: casual / smart casual&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; very good&lt;/p&gt;&lt;p&gt;outdoor food, drinks, lawn seating, and waterfront atmosphere.&lt;/p&gt;">
+      <div class="card-title"><i class="blue"></i><h3>Sparkman Wharf</h3></div>
+      <div class="chips"><span>Free–$$</span><span>2–3 hours</span><span>Attire: Casual / smart casual</span></div>
+      <div class="details"><p><b>Overall review:</b> Very good</p><p>Outdoor food, drinks, lawn seating, and waterfront atmosphere.</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=615+Channelside+Dr%2C+Tampa%2C+FL+33602&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="activity" data-key="activity-8" data-search="st. pete pier &lt;span&gt;free–$$&lt;/span&gt;&lt;span&gt;3–5 hours&lt;/span&gt;&lt;span&gt;attire: casual; walking shoes&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; excellent&lt;/p&gt;&lt;p&gt;bay views, public art, food, and downtown st. petersburg nearby.&lt;/p&gt;">
+      <div class="card-title"><i class="blue"></i><h3>St. Pete Pier</h3></div>
+      <div class="chips"><span>Free–$$</span><span>3–5 hours</span><span>Attire: Casual; walking shoes</span></div>
+      <div class="details"><p><b>Overall review:</b> Excellent</p><p>Bay views, public art, food, and downtown St. Petersburg nearby.</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=600+2nd+Ave+NE%2C+St+Petersburg%2C+FL+33701&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="activity" data-key="activity-9" data-search="the dalí museum &lt;span&gt;$$&lt;/span&gt;&lt;span&gt;2–3 hours&lt;/span&gt;&lt;span&gt;attire: smart casual&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; excellent&lt;/p&gt;&lt;p&gt;distinctive art and architecture near the st. petersburg waterfront.&lt;/p&gt;">
+      <div class="card-title"><i class="blue"></i><h3>The Dalí Museum</h3></div>
+      <div class="chips"><span>$$</span><span>2–3 hours</span><span>Attire: Smart casual</span></div>
+      <div class="details"><p><b>Overall review:</b> Excellent</p><p>Distinctive art and architecture near the St. Petersburg waterfront.</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=1+Dali+Blvd%2C+St+Petersburg%2C+FL+33701&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="activity" data-key="activity-10" data-search="yacht starship dinner cruise &lt;span&gt;$$$&lt;/span&gt;&lt;span&gt;2–3 hours&lt;/span&gt;&lt;span&gt;attire: smart casual / dressy&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; very good&lt;/p&gt;&lt;p&gt;dinner and skyline views make this a straightforward special-event date.&lt;/p&gt;">
+      <div class="card-title"><i class="blue"></i><h3>Yacht StarShip Dinner Cruise</h3></div>
+      <div class="chips"><span>$$$</span><span>2–3 hours</span><span>Attire: Smart casual / dressy</span></div>
+      <div class="details"><p><b>Overall review:</b> Very good</p><p>Dinner and skyline views make this a straightforward special-event date.</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=603+Channelside+Dr%2C+Tampa%2C+FL+33602&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="activity" data-key="activity-11" data-search="topgolf tampa &lt;span&gt;$$–$$$&lt;/span&gt;&lt;span&gt;2–3 hours&lt;/span&gt;&lt;span&gt;attire: casual / athletic casual&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; very good&lt;/p&gt;&lt;p&gt;interactive and social even for people who do not regularly play golf.&lt;/p&gt;">
+      <div class="card-title"><i class="blue"></i><h3>Topgolf Tampa</h3></div>
+      <div class="chips"><span>$$–$$$</span><span>2–3 hours</span><span>Attire: Casual / athletic casual</span></div>
+      <div class="details"><p><b>Overall review:</b> Very good</p><p>Interactive and social even for people who do not regularly play golf.</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=10690+Palm+River+Rd%2C+Tampa%2C+FL+33619&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="activity" data-key="activity-12" data-search="shuffle &lt;span&gt;$$&lt;/span&gt;&lt;span&gt;2–3 hours&lt;/span&gt;&lt;span&gt;attire: casual&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; very good&lt;/p&gt;&lt;p&gt;low-pressure shuffleboard, food, and drinks in tampa heights.&lt;/p&gt;">
+      <div class="card-title"><i class="blue"></i><h3>Shuffle</h3></div>
+      <div class="chips"><span>$$</span><span>2–3 hours</span><span>Attire: Casual</span></div>
+      <div class="details"><p><b>Overall review:</b> Very good</p><p>Low-pressure shuffleboard, food, and drinks in Tampa Heights.</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=2612+N+Tampa+St%2C+Tampa%2C+FL+33602&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="activity" data-key="activity-13" data-search="tampa theatre &lt;span&gt;$$&lt;/span&gt;&lt;span&gt;2–3 hours&lt;/span&gt;&lt;span&gt;attire: smart casual&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; excellent&lt;/p&gt;&lt;p&gt;historic movie palace offering films, concerts, and special events.&lt;/p&gt;">
+      <div class="card-title"><i class="blue"></i><h3>Tampa Theatre</h3></div>
+      <div class="chips"><span>$$</span><span>2–3 hours</span><span>Attire: Smart casual</span></div>
+      <div class="details"><p><b>Overall review:</b> Excellent</p><p>Historic movie palace offering films, concerts, and special events.</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=711+N+Franklin+St%2C+Tampa%2C+FL+33602&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="activity" data-key="activity-14" data-search="lettuce lake park &lt;span&gt;$–$$&lt;/span&gt;&lt;span&gt;2–4 hours&lt;/span&gt;&lt;span&gt;attire: outdoor activewear; walking shoes&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; very good&lt;/p&gt;&lt;p&gt;boardwalks, nature, paddling, and a quieter break from the city.&lt;/p&gt;">
+      <div class="card-title"><i class="blue"></i><h3>Lettuce Lake Park</h3></div>
+      <div class="chips"><span>$–$$</span><span>2–4 hours</span><span>Attire: Outdoor activewear; walking shoes</span></div>
+      <div class="details"><p><b>Overall review:</b> Very good</p><p>Boardwalks, nature, paddling, and a quieter break from the city.</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=6920+E+Fletcher+Ave%2C+Tampa%2C+FL+33637&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="activity" data-key="activity-15" data-search="teco streetcar date &lt;span&gt;free&lt;/span&gt;&lt;span&gt;2–4 hours&lt;/span&gt;&lt;span&gt;attire: casual; comfortable shoes&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; very good&lt;/p&gt;&lt;p&gt;ride between ybor, channelside, and downtown without driving between stops.&lt;/p&gt;">
+      <div class="card-title"><i class="blue"></i><h3>TECO Streetcar Date</h3></div>
+      <div class="chips"><span>Free</span><span>2–4 hours</span><span>Attire: Casual; comfortable shoes</span></div>
+      <div class="details"><p><b>Overall review:</b> Very good</p><p>Ride between Ybor, Channelside, and downtown without driving between stops.</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=Centro+Ybor+Station%2C+Tampa%2C+FL&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="activity" data-key="activity-16" data-search="ybor city food and history walk &lt;span&gt;$–$$$&lt;/span&gt;&lt;span&gt;3–4 hours&lt;/span&gt;&lt;span&gt;attire: casual; walking shoes&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; very good&lt;/p&gt;&lt;p&gt;combines tampa history, cuban culture, architecture, and food.&lt;/p&gt;">
+      <div class="card-title"><i class="blue"></i><h3>Ybor City Food and History Walk</h3></div>
+      <div class="chips"><span>$–$$$</span><span>3–4 hours</span><span>Attire: Casual; walking shoes</span></div>
+      <div class="details"><p><b>Overall review:</b> Very good</p><p>Combines Tampa history, Cuban culture, architecture, and food.</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=Centro+Ybor%2C+1600+E+8th+Ave%2C+Tampa%2C+FL+33605&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="activity" data-key="activity-17" data-search="bayshore boulevard walk &lt;span&gt;free&lt;/span&gt;&lt;span&gt;1–2 hours&lt;/span&gt;&lt;span&gt;attire: athletic casual; walking shoes&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; excellent&lt;/p&gt;&lt;p&gt;long waterfront promenade with skyline and bay views.&lt;/p&gt;">
+      <div class="card-title"><i class="blue"></i><h3>Bayshore Boulevard Walk</h3></div>
+      <div class="chips"><span>Free</span><span>1–2 hours</span><span>Attire: Athletic casual; walking shoes</span></div>
+      <div class="details"><p><b>Overall review:</b> Excellent</p><p>Long waterfront promenade with skyline and bay views.</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=Bayshore+Blvd%2C+Tampa%2C+FL&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="activity" data-key="activity-18" data-search="curtis hixon waterfront park picnic &lt;span&gt;$&lt;/span&gt;&lt;span&gt;1–3 hours&lt;/span&gt;&lt;span&gt;attire: casual&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; very good&lt;/p&gt;&lt;p&gt;simple downtown picnic date with riverwalk access and skyline views.&lt;/p&gt;">
+      <div class="card-title"><i class="blue"></i><h3>Curtis Hixon Waterfront Park Picnic</h3></div>
+      <div class="chips"><span>$</span><span>1–3 hours</span><span>Attire: Casual</span></div>
+      <div class="details"><p><b>Overall review:</b> Very good</p><p>Simple downtown picnic date with Riverwalk access and skyline views.</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=600+N+Ashley+Dr%2C+Tampa%2C+FL+33602&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="activity" data-key="activity-19" data-search="museum of science &amp; industry &lt;span&gt;$$&lt;/span&gt;&lt;span&gt;2–4 hours&lt;/span&gt;&lt;span&gt;attire: casual&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; good&lt;/p&gt;&lt;p&gt;hands-on exhibits and indoor activities for a relaxed daytime date.&lt;/p&gt;">
+      <div class="card-title"><i class="blue"></i><h3>Museum of Science &amp; Industry</h3></div>
+      <div class="chips"><span>$$</span><span>2–4 hours</span><span>Attire: Casual</span></div>
+      <div class="details"><p><b>Overall review:</b> Good</p><p>Hands-on exhibits and indoor activities for a relaxed daytime date.</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=4801+E+Fowler+Ave%2C+Tampa%2C+FL+33617&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="activity" data-key="activity-20" data-search="tampa museum of art &lt;span&gt;$$&lt;/span&gt;&lt;span&gt;1–2 hours&lt;/span&gt;&lt;span&gt;attire: smart casual&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; very good&lt;/p&gt;&lt;p&gt;compact art date directly beside curtis hixon park and the riverwalk.&lt;/p&gt;">
+      <div class="card-title"><i class="blue"></i><h3>Tampa Museum of Art</h3></div>
+      <div class="chips"><span>$$</span><span>1–2 hours</span><span>Attire: Smart casual</span></div>
+      <div class="details"><p><b>Overall review:</b> Very good</p><p>Compact art date directly beside Curtis Hixon Park and the Riverwalk.</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=120+W+Gasparilla+Plaza%2C+Tampa%2C+FL+33602&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="activity" data-key="activity-21" data-search="adventure island &lt;span&gt;$$$&lt;/span&gt;&lt;span&gt;full day&lt;/span&gt;&lt;span&gt;attire: swimwear; water shoes&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; very good&lt;/p&gt;&lt;p&gt;waterpark date best for hot-weather weekends.&lt;/p&gt;">
+      <div class="card-title"><i class="blue"></i><h3>Adventure Island</h3></div>
+      <div class="chips"><span>$$$</span><span>Full day</span><span>Attire: Swimwear; water shoes</span></div>
+      <div class="details"><p><b>Overall review:</b> Very good</p><p>Waterpark date best for hot-weather weekends.</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=10001+McKinley+Dr%2C+Tampa%2C+FL+33612&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="activity" data-key="activity-22" data-search="fort de soto park &lt;span&gt;$&lt;/span&gt;&lt;span&gt;half or full day&lt;/span&gt;&lt;span&gt;attire: beach/outdoor wear&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; excellent&lt;/p&gt;&lt;p&gt;beaches, trails, historic fort, kayaking, and strong scenery.&lt;/p&gt;">
+      <div class="card-title"><i class="blue"></i><h3>Fort De Soto Park</h3></div>
+      <div class="chips"><span>$</span><span>Half or full day</span><span>Attire: Beach/outdoor wear</span></div>
+      <div class="details"><p><b>Overall review:</b> Excellent</p><p>Beaches, trails, historic fort, kayaking, and strong scenery.</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=3500+Pinellas+Bayway+S%2C+Tierra+Verde%2C+FL+33715&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="activity" data-key="activity-23" data-search="davis islands sunset walk &lt;span&gt;free&lt;/span&gt;&lt;span&gt;1–2 hours&lt;/span&gt;&lt;span&gt;attire: casual; walking shoes&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; very good&lt;/p&gt;&lt;p&gt;easy neighborhood waterfront walk with downtown views.&lt;/p&gt;">
+      <div class="card-title"><i class="blue"></i><h3>Davis Islands Sunset Walk</h3></div>
+      <div class="chips"><span>Free</span><span>1–2 hours</span><span>Attire: Casual; walking shoes</span></div>
+      <div class="details"><p><b>Overall review:</b> Very good</p><p>Easy neighborhood waterfront walk with downtown views.</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=Davis+Islands%2C+Tampa%2C+FL&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="activity" data-key="activity-24" data-search="pirate water taxi &lt;span&gt;$$&lt;/span&gt;&lt;span&gt;1–3 hours&lt;/span&gt;&lt;span&gt;attire: casual / smart casual&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; very good&lt;/p&gt;&lt;p&gt;a convenient sightseeing date with multiple waterfront stops.&lt;/p&gt;">
+      <div class="card-title"><i class="blue"></i><h3>Pirate Water Taxi</h3></div>
+      <div class="chips"><span>$$</span><span>1–3 hours</span><span>Attire: Casual / smart casual</span></div>
+      <div class="details"><p><b>Overall review:</b> Very good</p><p>A convenient sightseeing date with multiple waterfront stops.</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=333+S+Franklin+St%2C+Tampa%2C+FL+33602&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article></div></section>
+<section data-group="michelin"><div class="section-title"><i class="gold"></i><h2>Michelin Wild Card</h2></div><div class="grid">
+    <article class="place-card" data-category="michelin" data-key="michelin-0" data-search="rocca &lt;span&gt;one michelin star&lt;/span&gt;&lt;span&gt;italian / contemporary&lt;/span&gt;&lt;span&gt;attire: smart casual / dressy&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; exceptional&lt;/p&gt;&lt;p class=&#x27;source-note&#x27;&gt;michelin status is based on the 2026 guide.&lt;/p&gt;">
+      <div class="card-title"><i class="gold"></i><h3>Rocca</h3></div>
+      <div class="chips"><span>One MICHELIN Star</span><span>Italian / Contemporary</span><span>Attire: Smart casual / dressy</span></div>
+      <div class="details"><p><b>Overall review:</b> Exceptional</p><p class='source-note'>MICHELIN status is based on the 2026 Guide.</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=323+W+Palm+Ave%2C+Tampa%2C+FL+33602&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="michelin" data-key="michelin-1" data-search="koya &lt;span&gt;one michelin star&lt;/span&gt;&lt;span&gt;japanese / contemporary&lt;/span&gt;&lt;span&gt;attire: dressy / refined&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; exceptional&lt;/p&gt;&lt;p class=&#x27;source-note&#x27;&gt;michelin status is based on the 2026 guide.&lt;/p&gt;">
+      <div class="card-title"><i class="gold"></i><h3>Koya</h3></div>
+      <div class="chips"><span>One MICHELIN Star</span><span>Japanese / Contemporary</span><span>Attire: Dressy / refined</span></div>
+      <div class="details"><p><b>Overall review:</b> Exceptional</p><p class='source-note'>MICHELIN status is based on the 2026 Guide.</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=807+W+Platt+St%2C+Tampa%2C+FL+33606&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="michelin" data-key="michelin-2" data-search="kōsen &lt;span&gt;one michelin star&lt;/span&gt;&lt;span&gt;japanese / sushi&lt;/span&gt;&lt;span&gt;attire: dressy / refined&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; exceptional&lt;/p&gt;&lt;p class=&#x27;source-note&#x27;&gt;michelin status is based on the 2026 guide.&lt;/p&gt;">
+      <div class="card-title"><i class="gold"></i><h3>Kōsen</h3></div>
+      <div class="chips"><span>One MICHELIN Star</span><span>Japanese / Sushi</span><span>Attire: Dressy / refined</span></div>
+      <div class="details"><p><b>Overall review:</b> Exceptional</p><p class='source-note'>MICHELIN status is based on the 2026 Guide.</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=307+W+Palm+Ave%2C+Tampa%2C+FL+33602&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="michelin" data-key="michelin-3" data-search="ebbe &lt;span&gt;one michelin star&lt;/span&gt;&lt;span&gt;contemporary&lt;/span&gt;&lt;span&gt;attire: dressy&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; exceptional&lt;/p&gt;&lt;p class=&#x27;source-note&#x27;&gt;michelin status is based on the 2026 guide.&lt;/p&gt;">
+      <div class="card-title"><i class="gold"></i><h3>Ebbe</h3></div>
+      <div class="chips"><span>One MICHELIN Star</span><span>Contemporary</span><span>Attire: Dressy</span></div>
+      <div class="details"><p><b>Overall review:</b> Exceptional</p><p class='source-note'>MICHELIN status is based on the 2026 Guide.</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=1202+N+Franklin+St%2C+Tampa%2C+FL+33602&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="michelin" data-key="michelin-4" data-search="lilac &lt;span&gt;one michelin star&lt;/span&gt;&lt;span&gt;mediterranean / contemporary&lt;/span&gt;&lt;span&gt;attire: dressy / resort elegant&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; exceptional&lt;/p&gt;&lt;p class=&#x27;source-note&#x27;&gt;michelin status is based on the 2026 guide.&lt;/p&gt;">
+      <div class="card-title"><i class="gold"></i><h3>Lilac</h3></div>
+      <div class="chips"><span>One MICHELIN Star</span><span>Mediterranean / Contemporary</span><span>Attire: Dressy / resort elegant</span></div>
+      <div class="details"><p><b>Overall review:</b> Exceptional</p><p class='source-note'>MICHELIN status is based on the 2026 Guide.</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=500+Channelside+Dr%2C+Tampa%2C+FL+33602&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="michelin" data-key="michelin-5" data-search="psomi &lt;span&gt;bib gourmand&lt;/span&gt;&lt;span&gt;greek&lt;/span&gt;&lt;span&gt;attire: casual / polished&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; excellent&lt;/p&gt;&lt;p class=&#x27;source-note&#x27;&gt;michelin status is based on the 2026 guide.&lt;/p&gt;">
+      <div class="card-title"><i class="gold"></i><h3>Psomi</h3></div>
+      <div class="chips"><span>Bib Gourmand</span><span>Greek</span><span>Attire: Casual / polished</span></div>
+      <div class="details"><p><b>Overall review:</b> Excellent</p><p class='source-note'>MICHELIN status is based on the 2026 Guide.</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=701+N+Howard+Ave%2C+Tampa%2C+FL+33606&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="michelin" data-key="michelin-6" data-search="bern&#x27;s steak house &lt;span&gt;michelin selected&lt;/span&gt;&lt;span&gt;steakhouse&lt;/span&gt;&lt;span&gt;attire: business casual / dressy&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; excellent&lt;/p&gt;&lt;p class=&#x27;source-note&#x27;&gt;michelin status is based on the 2026 guide.&lt;/p&gt;">
+      <div class="card-title"><i class="gold"></i><h3>Bern&#x27;s Steak House</h3></div>
+      <div class="chips"><span>MICHELIN Selected</span><span>Steakhouse</span><span>Attire: Business casual / dressy</span></div>
+      <div class="details"><p><b>Overall review:</b> Excellent</p><p class='source-note'>MICHELIN status is based on the 2026 Guide.</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=1208+S+Howard+Ave%2C+Tampa%2C+FL+33606&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="michelin" data-key="michelin-7" data-search="predalina &lt;span&gt;michelin selected&lt;/span&gt;&lt;span&gt;mediterranean&lt;/span&gt;&lt;span&gt;attire: smart casual / fashionable&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; very good&lt;/p&gt;&lt;p class=&#x27;source-note&#x27;&gt;michelin status is based on the 2026 guide.&lt;/p&gt;">
+      <div class="card-title"><i class="gold"></i><h3>Predalina</h3></div>
+      <div class="chips"><span>MICHELIN Selected</span><span>Mediterranean</span><span>Attire: Smart casual / fashionable</span></div>
+      <div class="details"><p><b>Overall review:</b> Very good</p><p class='source-note'>MICHELIN status is based on the 2026 Guide.</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=1001+E+Cumberland+Ave%2C+Tampa%2C+FL+33602&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="michelin" data-key="michelin-8" data-search="noble rice &lt;span&gt;michelin selected&lt;/span&gt;&lt;span&gt;japanese&lt;/span&gt;&lt;span&gt;attire: smart casual&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; excellent&lt;/p&gt;&lt;p class=&#x27;source-note&#x27;&gt;michelin status is based on the 2026 guide.&lt;/p&gt;">
+      <div class="card-title"><i class="gold"></i><h3>Noble Rice</h3></div>
+      <div class="chips"><span>MICHELIN Selected</span><span>Japanese</span><span>Attire: Smart casual</span></div>
+      <div class="details"><p><b>Overall review:</b> Excellent</p><p class='source-note'>MICHELIN status is based on the 2026 Guide.</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=615+Channelside+Dr+Ste+112%2C+Tampa%2C+FL+33602&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article>
+    <article class="place-card" data-category="michelin" data-key="michelin-9" data-search="the pearl &lt;span&gt;michelin selected&lt;/span&gt;&lt;span&gt;american&lt;/span&gt;&lt;span&gt;attire: smart casual&lt;/span&gt; &lt;p&gt;&lt;b&gt;overall review:&lt;/b&gt; very good&lt;/p&gt;&lt;p class=&#x27;source-note&#x27;&gt;michelin status is based on the 2026 guide.&lt;/p&gt;">
+      <div class="card-title"><i class="gold"></i><h3>The Pearl</h3></div>
+      <div class="chips"><span>MICHELIN Selected</span><span>American</span><span>Attire: Smart casual</span></div>
+      <div class="details"><p><b>Overall review:</b> Very good</p><p class='source-note'>MICHELIN status is based on the 2026 Guide.</p></div>
+      <a class="maps" href="https://maps.apple.com/?daddr=823+Water+St%2C+Tampa%2C+FL+33602&dirflg=d">Open in Apple Maps</a>
+      <div class="tracker">
+        <label>Status<select data-field="status"><option>Not Visited</option><option>Planned</option><option>Completed</option></select></label>
+        <label>Rating<select data-field="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="check"><input type="checkbox" data-field="favorite"> Favorite</label>
+        <label class="wide">Notes<textarea data-field="notes" placeholder="What did you like, order, or want to remember?"></textarea></label>
+      </div>
+    </article></div></section>
+<section class="backup"><b>Progress backup</b><p class="sub">Progress saves on this device. Export a backup before deleting the viewer app or clearing its data.</p><button id="exportBtn">Export</button><button id="importBtn">Import</button><input id="importFile" type="file" accept=".json" hidden><button id="resetBtn">Reset</button></section>
+</main><div id="toast">Saved</div>
+<script>
+const KEY="daniRayTampaBucket_v1";let state={},filter="all",query="";
+try{state=JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){}
+const cards=[...document.querySelectorAll(".place-card")];
+function toast(t){let x=document.getElementById("toast");x.textContent=t;x.classList.add("show");setTimeout(()=>x.classList.remove("show"),900)}
+function save(){localStorage.setItem(KEY,JSON.stringify(state));updateStats()}
+function applyCard(c){let s=state[c.dataset.key]||{};c.querySelector('[data-field=status]').value=s.status||"Not Visited";c.querySelector('[data-field=rating]').value=s.rating||"";c.querySelector('[data-field=favorite]').checked=!!s.favorite;c.querySelector('[data-field=notes]').value=s.notes||"";c.classList.toggle("completed",s.status==="Completed");c.classList.toggle("favorite",!!s.favorite)}
+cards.forEach(c=>{applyCard(c);c.querySelectorAll("[data-field]").forEach(el=>el.addEventListener("change",()=>{let s=state[c.dataset.key]||{},f=el.dataset.field;s[f]=el.type==="checkbox"?el.checked:el.value;state[c.dataset.key]=s;applyCard(c);save();filterCards();toast("Saved")}))})
+function filterCards(){cards.forEach(c=>{let s=state[c.dataset.key]||{},ok=filter==="all"||c.dataset.category===filter||(filter==="planned"&&s.status==="Planned")||(filter==="completed"&&s.status==="Completed")||(filter==="favorite"&&s.favorite);c.classList.toggle("hidden",!(ok&&c.dataset.search.includes(query)))});document.querySelectorAll("[data-group]").forEach(g=>{g.classList.toggle("hidden",![...g.querySelectorAll(".place-card")].some(c=>!c.classList.contains("hidden")))})}
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active");filter=b.dataset.filter;filterCards()});
+search.oninput=e=>{query=e.target.value.toLowerCase().trim();filterCards()};
+function updateStats(){let completed=cards.filter(c=>(state[c.dataset.key]||{}).status==="Completed"),r=completed.filter(c=>c.dataset.category==="restaurant").length,a=completed.filter(c=>c.dataset.category==="activity").length,ratings=cards.map(c=>Number((state[c.dataset.key]||{}).rating)).filter(Boolean);overall.textContent=completed.length+"/65";restStat.textContent=r+"/30";actStat.textContent=a+"/25";avgStat.textContent=ratings.length?(ratings.reduce((x,y)=>x+y,0)/ratings.length).toFixed(1)+"/10":"—"}
+exportBtn.onclick=()=>{let blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="Dani-Ray-Tampa-Progress.json";a.click()};
+importBtn.onclick=()=>importFile.click();importFile.onchange=e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{state=JSON.parse(r.result);save();cards.forEach(applyCard);filterCards();toast("Imported")}catch(x){alert("Invalid backup file")}};r.readAsText(f)};
+resetBtn.onclick=()=>{if(confirm("Erase all progress?")){state={};save();cards.forEach(applyCard);filterCards()}};
+updateStats();filterCards();
+</script></body></html>
